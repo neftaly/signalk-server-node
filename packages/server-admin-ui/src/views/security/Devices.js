@@ -64,7 +64,8 @@ class Devices extends Component {
     event.preventDefault()
 
     var payload = {
-      permissions: this.state.selectedDevice.permissions || 'readonly'
+      permissions: this.state.selectedDevice.permissions || 'readonly',
+      description: this.state.selectedDevice.description
     }
 
     fetch(`/security/devices/${this.state.selectedDevice.uuid}`, {
@@ -154,7 +155,7 @@ class Devices extends Component {
                         >
                           <td>{device.uuid}</td>
                           <td>{device.description}</td>
-                          <td>{convertPerissions(device.permissions)}</td>
+                          <td>{convertPermissions(device.permissions)}</td>
                         </tr>
                       )
                     })}
@@ -182,9 +183,25 @@ class Devices extends Component {
                     </FormGroup>
                     <FormGroup row>
                       <Col md='2'>
+                        <Label htmlFor='description'>Description</Label>
+                      </Col>
+                      <Col xs='12' md='9'>
+                      <Input
+                        size='60'
+                        style={{ width: 'auto' }}
+                        type='text'
+                        name='description'
+                        onChange={this.handleDeviceChange}
+                        value={this.state.selectedDevice.description}
+                      />
+                      </Col>
+                    </FormGroup>
+                    <FormGroup row>
+                      <Col md='2'>
                         <Label htmlFor='select'>Permissions</Label>
                       </Col>
                       <Col xs='12' md='2'>
+                {!this.state.selectedDevice.requestedPermissions && (
                         <Input
                           type='select'
                           name='permissions'
@@ -194,7 +211,11 @@ class Devices extends Component {
                           <option value='readonly'>Read Only</option>
                           <option value='readwrite'>Read/Write</option>
                           <option value='admin'>Admin</option>
-                        </Input>
+                </Input>
+                )}
+              {this.state.selectedDevice.requestedPermissions && (
+                  <Label>{convertPermissions(this.state.selectedDevice.permissions)}</Label>
+              )}
                       </Col>
                     </FormGroup>
                   </CardBody>
@@ -243,7 +264,7 @@ const mapStateToProps = ({ securityDevices }) => ({ securityDevices })
 
 export default connect(mapStateToProps)(Devices)
 
-function convertPerissions (type) {
+function convertPermissions (type) {
   if (type == 'readonly') {
     return 'Read Only'
   } else if (type == 'readwrite') {
