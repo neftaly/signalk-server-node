@@ -151,12 +151,17 @@ class AccessRequests extends Component {
             <Col md="2">
               <Label htmlFor="select">Permissions</Label>
             </Col>
-            <Col xs="12" md="2">
+           <Col xs="12" md="2">
+             {!this.state.selectedRequest.requestedPermissions && (
               <Input type="select" name="permissions" value={this.state.selectedRequest.permissions} onChange={this.handleRequestChange}>
                 <option value="readonly">Read Only</option>
                 <option value="readwrite">Read/Write</option>
                 <option value="admin">Admin</option>
-              </Input>
+                 </Input>
+             )}
+             {this.state.selectedRequest.requestedPermissions && (
+              <Label>{convertPermissions(this.state.selectedRequest.permissions)}</Label>
+              )}
             </Col>
           </FormGroup>
         </CardBody>
@@ -185,5 +190,17 @@ class AccessRequests extends Component {
 const mapStateToProps = ({ accessRequests, loginStatus  }) => ({ accessRequests, loginStatus })
 
 export default connect(mapStateToProps)(AccessRequests)
+
+function convertPermissions (type) {
+  if (type == 'readonly') {
+    return 'Read Only'
+  } else if (type == 'readwrite') {
+    return 'Read/Write'
+  } else if (type == 'admin') {
+    return 'Admin'
+  } else {
+    return `Unknown ${type}`
+  }
+}
 
 
