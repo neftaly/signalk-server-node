@@ -68,7 +68,7 @@ class Devices extends Component {
       description: this.state.selectedDevice.description
     }
 
-    fetch(`/security/devices/${this.state.selectedDevice.uuid}`, {
+    fetch(`/security/devices/${this.state.selectedDevice.clientId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ class Devices extends Component {
   }
 
   deleteDevice (event) {
-    fetch(`/security/devices/${this.state.selectedDevice.uuid}`, {
+    fetch(`/security/devices/${this.state.selectedDevice.clientId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -137,7 +137,7 @@ class Devices extends Component {
                 <Table hover responsive bordered striped size='sm'>
                   <thead>
                     <tr>
-                      <th>UUID</th>
+                      <th>Client ID</th>
                       <th>Description</th>
                       <th>Type</th>
                     </tr>
@@ -146,14 +146,14 @@ class Devices extends Component {
                     {(this.state.devices || []).map((device, index) => {
                       return (
                         <tr
-                          key={device.uuid}
+                          key={device.clientId}
                           onClick={this.deviceClicked.bind(
                             this,
                             device,
                             index
                           )}
                         >
-                          <td>{device.uuid}</td>
+                          <td>{device.clientId}</td>
                           <td>{device.description}</td>
                           <td>{convertPermissions(device.permissions)}</td>
                         </tr>
@@ -175,10 +175,10 @@ class Devices extends Component {
                   <CardBody>
                     <FormGroup row>
                       <Col md='2'>
-                        <Label htmlFor='uuid'>UUID</Label>
+                        <Label htmlFor='clientId'>Client ID</Label>
                       </Col>
                       <Col xs='12' md='9'>
-                        <Label>{this.state.selectedDevice.uuid}</Label>
+                        <Label>{this.state.selectedDevice.clientId}</Label>
                       </Col>
                     </FormGroup>
                     <FormGroup row>
